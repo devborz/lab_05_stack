@@ -5,46 +5,46 @@
 
 
 template <typename T>
-class Stack
+class Stack1
 {
 private:
     unsigned int size;
     Element<T> head_value;
 public:
-    Stack();
+    Stack1();
     void push(T&& value);
     void push(const T& value);
     void pop();
     const T& head() const;
-    ~Stack() = default;
+    ~Stack1() = default;
 };
 
 template <typename T>
-Stack<T>::Stack() {
+Stack1<T>::Stack1() {
     this->size = 0;
 }
 
 template <typename T>
-void Stack<T>::push(T&& value) {
+void Stack1<T>::push(T&& value) {
     Element<T> el(value, head_value);
     size++;
     this->head_value.reset(el);
 }
 
 template <typename T>
-void Stack<T>::push(const T& value) {
+void Stack1<T>::push(const T& value) {
     Element<T> el(value, head_value);
     size++;
     this->head_value.reset(el);
 }
 
 template <typename T>
-void Stack<T>::pop() {
+void Stack1<T>::pop() {
     this->head_value.reset(head_value.getNext());
     size--;
 }
 
 template <typename T>
-const T& Stack<T>::head() const{
+const T& Stack1<T>::head() const{
     return this->head_value.getValue();
 }
