@@ -1,18 +1,19 @@
 #pragma once
 
 #include <iostream>
-#include "Element.h"
 
 template <typename T>
 class Stack2
 {
 private:
     unsigned int size;
-    Element<T> head_value;
+    T *stack;
+
 public:
     Stack2();
     template <typename ... Args>
     void push_emplace(Args&&... value);
+    void push(const T& value);
     void push(T&& value);
     const T& head() const;
     T pop();
@@ -22,35 +23,60 @@ public:
 template <typename T>
 Stack2<T>::Stack2() {
     this->size = 0;
+    this->stack = new T [size];
+}
+
+template <typename T>
+void Stack2<T>::push(const T& value) {
+    T* old = this->stack;
+
+    size++;
+    this->stack = new T [size];
+
+    for(int i = 0; i < size - 1; i++) {
+        this->stack[i + 1] = old[i];
+    }
+    this->stack[0] = value;;
 }
 
 template <typename T>
 void Stack2<T>::push(T&& value) {
-    Element<T> el(value, head_value);
+    T* old = this->stack;
+
     size++;
-    this->head_value.reset(el);
+    this->stack = new T [size];
+
+    for(int i = 0; i < size - 1; i++) {
+        this->stack[i + 1] = old[i];
+    }
+    this->stack[0] = std::move(value);
 }
 
 template <typename T>
 const T& Stack2<T>::head() const{
-    return this->head_value.getValue();
+    return this->stack[0];
 }
 
 template <typename T>
 template <typename ... Args>
 void Stack2<T>::push_emplace(Args&&... value) {
     T args [] = {value...};
-    for(auto& e: args) {
-        Element<T> el(e, head_value);
-        size++;
-        this->head_value.reset(el);
+
+    for(const auto& e: args) {
+        this->push(e);
     }
 }
 
 template <typename T>
 T Stack2<T>::pop() {
-    T El = head_value.getValue();
-    this->head_value.reset(head_value.getNext());
+    T* old = this->stack;
+    T e = this->stack[0];
+
     size--;
-    return El;
+    this->stack = new T [size];
+
+    for(int i = 0; i < size; i++) {
+        this->stack[i] = old[i + 1];
+    }
+    return e;
 }

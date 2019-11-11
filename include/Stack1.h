@@ -1,15 +1,14 @@
 #pragma once
 
 #include <iostream>
-#include "Element.h"
-
 
 template <typename T>
 class Stack1
 {
 private:
     unsigned int size;
-    Element<T> head_value;
+    T *stack;
+
 public:
     Stack1();
     void push(T&& value);
@@ -22,29 +21,48 @@ public:
 template <typename T>
 Stack1<T>::Stack1() {
     this->size = 0;
+    this->stack = new T [size];
 }
 
 template <typename T>
 void Stack1<T>::push(T&& value) {
-    Element<T> el(value, head_value);
+    T* old = this->stack;
+
     size++;
-    this->head_value.reset(el);
+    this->stack = new T [size];
+
+    for(int i = 0; i < size - 1; i++) {
+        this->stack[i + 1] = old[i];
+    }
+    this->stack[0] = std::move(value);
 }
 
 template <typename T>
 void Stack1<T>::push(const T& value) {
-    Element<T> el(value, head_value);
+    T* old = this->stack;
+
     size++;
-    this->head_value.reset(el);
+    this->stack = new T [size];
+
+    for(int i = 0; i < size - 1; i++) {
+        this->stack[i + 1] = *old[i];
+    }
+    this->stack[0] = value;
 }
 
 template <typename T>
 void Stack1<T>::pop() {
-    this->head_value.reset(head_value.getNext());
+    T *old = this->stack;
+
     size--;
+    this->stack = new T [size];
+
+    for(int i = 0; i < size; i++) {
+        this->stack[i] = old[i + 1];
+    }
 }
 
 template <typename T>
 const T& Stack1<T>::head() const{
-    return this->head_value.getValue();
+    return this->stack[0];
 }

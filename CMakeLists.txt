@@ -25,16 +25,14 @@ project(stack)
 add_library(stack1 INTERFACE)
 add_library(stack2 INTERFACE)
 
-add_library(element INTERFACE)
 
 add_executable(stack sources/main.cpp)
 
-target_include_directories(element INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(stack1 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(stack2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(stack1 INTERFACE element)
-target_link_libraries(stack2 INTERFACE element)
+target_link_libraries(stack1 INTERFACE)
+target_link_libraries(stack2 INTERFACE)
 target_link_libraries(stack stack1 stack2)
 
 #add_executable(tests
