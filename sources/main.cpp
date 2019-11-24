@@ -5,6 +5,7 @@
 int main() {
     // Stack 1
     std::cout << "_____FIRST__STACK_____\n";
+    Stack<int> st1;
     for(int i = 0; i < 10; i++) {
         st1.push(i);
     }
